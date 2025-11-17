@@ -2,102 +2,237 @@
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
-    <title>Formular mit Validierung</title>
-    <script src="https://cdn.jsdelivr.net/npm/parsleyjs"></script>
+    <title>Formular mit Parsley-Validierung</title>
+
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- jQuery (für Parsley nötig) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- Parsley.js -->
+    <script src="https://cdn.jsdelivr.net/npm/parsleyjs@2/dist/parsley.min.js"></script>
+
     <style>
+      /* --- Global Layout --- */
       body {
-        font-family: sans-serif;
-        padding: 30px;
-        background-color: lightpink (248, 243, 237);
+        font-family: "Poppins", sans-serif;
+        padding: 40px;
+        background: linear-gradient(135deg, #ffe3ef, #f7f2ff);
       }
+
+      h2 {
+        text-align: center;
+        font-weight: 600;
+        color: #4a3b6b;
+        margin-bottom: 20px;
+      }
+
       form {
-        max-width: 500px;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        max-width: 550px;
         margin: auto;
+        box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
       }
+
+      /* --- Form Labels --- */
       label {
         display: block;
-        margin-top: 15px;
+        margin-top: 18px;
+        font-weight: 500;
+        color: #4a3b6b;
       }
+
+      /* --- Inputs --- */
       input,
       select {
         width: 100%;
-        padding: 8px;
-        margin-top: 5px;
-      }
-      .submit-btn {
-        margin-top: 20px;
-        background-color: #4caf50;
-        color: pink;
-        border: none;
         padding: 10px;
+        margin-top: 6px;
+        border-radius: 8px;
+        border: 1.5px solid #c7b5e6;
+        font-size: 14px;
+        transition: 0.2s;
+        box-sizing: border-box;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: #8b59ff;
+        box-shadow: 0 0 6px rgba(139, 89, 255, 0.3);
+      }
+
+      /* --- Radio & Checkbox fix --- */
+      .inline-option {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-top: 8px;
+      }
+
+      /* --- Buttons --- */
+      .submit-btn,
+      .reset-btn {
+        margin-top: 25px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        width: 48%;
+        border: none;
+        font-size: 15px;
         cursor: pointer;
+        transition: 0.3s;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+      }
+
+      .submit-btn {
+        background: #8b59ff;
+        color: white;
+      }
+
+      .submit-btn:hover {
+        background: #6931ff;
+      }
+
+      .reset-btn {
+        background: #ff5e7e;
+        color: white;
+      }
+
+      .reset-btn:hover {
+        background: #e84167;
+      }
+
+      /* --- Fehlernachrichten --- */
+      .parsley-errors-list {
+        color: #e84167;
+        font-size: 13px;
+        list-style: none;
+        margin-top: 6px;
+        padding-left: 0;
       }
     </style>
   </head>
   <body>
-    <h2>Formular</h2>
+    <h2>Modernes Formular</h2>
 
     <form id="myForm" data-parsley-validate>
+      <!-- NAME -->
       <label for="name">Name:</label>
-      <input type="text" id="name" name="name" required />
+      <input
+        type="text"
+        id="name"
+        name="name"
+        required
+        data-parsley-minlength="2"
+        data-parsley-required-message="Bitte gib deinen Namen ein."
+      />
 
+      <!-- EMAIL -->
       <label for="email">E-Mail:</label>
-      <input type="email" id="email" name="email" required />
+      <input
+        type="email"
+        id="email"
+        name="email"
+        required
+        data-parsley-type="email"
+      />
 
+      <!-- ALTER -->
       <label for="age">Alter (18–99):</label>
-      <input type="number" id="age" name="age" min="18" max="99" required />
+      <input
+        type="number"
+        id="age"
+        name="age"
+        min="18"
+        max="99"
+        required
+        data-parsley-range="[18,99]"
+      />
 
+      <!-- PASSWORT -->
       <label for="password">Passwort:</label>
       <input
         type="password"
         id="password"
         name="password"
         required
-        minlength="6"
+        data-parsley-minlength="6"
       />
 
+      <!-- FARBE -->
       <label for="color">Lieblingsfarbe:</label>
       <input type="color" id="color" name="color" />
 
+      <!-- DATUM -->
       <label for="date">Geburtsdatum:</label>
       <input type="date" id="date" name="date" required />
 
+      <!-- ZEIT -->
       <label for="time">Lieblingszeit:</label>
       <input type="time" id="time" name="time" />
 
+      <!-- RANGE -->
       <label for="range">Zufriedenheit (0–100):</label>
       <input type="range" id="range" name="range" min="0" max="100" />
 
-      <label for="file">Datei hochladen:</label>
-      <input type="file" id="file" name="file" required />
+      <!-- DATEI -->
+      <label for="fileUpload">Datei hochladen:</label>
+      <input
+        type="file"
+        id="fileUpload"
+        name="file"
+        required
+        data-parsley-maxfilesize="2"
+      />
 
+      <!-- GESCHLECHT -->
       <label>Geschlecht:</label>
-      <input type="radio" name="gender" value="m" required /> Männlich
-      <input type="radio" name="gender" value="w" /> Weiblich
+      <div class="inline-option">
+        <input type="radio" name="gender" value="m" required />
+        <span>Männlich</span>
+      </div>
+      <div class="inline-option">
+        <input type="radio" name="gender" value="w" />
+        <span>Weiblich</span>
+      </div>
 
-      <label for="terms">
+      <!-- AGB -->
+      <label class="inline-option">
         <input type="checkbox" id="terms" name="terms" required />
-        Ich akzeptiere die Bedingungen
+        <span>Ich akzeptiere die Bedingungen</span>
       </label>
 
-      <button type="submit" class="submit-btn">Absenden</button>
-      <button type="reset" class="submit-btn" style="background-color: #f44336">
-        Zurücksetzen
-      </button>
+      <!-- BUTTONS -->
+      <div style="display: flex; justify-content: space-between">
+        <button type="submit" class="submit-btn">Absenden</button>
+        <button type="reset" class="reset-btn">Zurücksetzen</button>
+      </div>
     </form>
 
     <script>
-      document
-        .getElementById("fileUpload")
-        .addEventListener("change", function () {
-          const file = this.files[0];
-          const maxSize = 2 * 1024 * 1024 * 1024;
+      // Custom Validator für Dateigröße (in MB)
+      window.Parsley.addValidator("maxfilesize", {
+        validateString: function (value, maxSize, parsleyInstance) {
+          const files = parsleyInstance.$element[0].files;
+          if (!files.length) return true;
 
-          if (file && file.size > maxSize) {
-            alert("Die Datei ist größer als 2 GB.");
-            this.value = "";
-          }
-        });
+          const file = files[0];
+          const maxBytes = maxSize * 1024 * 1024;
+          return file.size <= maxBytes;
+        },
+        requirementType: "number",
+        messages: {
+          de: "Die Datei ist zu groß. Max. %s MB erlaubt.",
+        },
+      });
+
+      $("#myForm").parsley();
     </script>
   </body>
 </html>
