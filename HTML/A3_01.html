@@ -181,13 +181,13 @@
       <label for="range">Zufriedenheit (0–100):</label>
       <input type="range" id="range" name="range" min="0" max="100" />
 
-      <!-- DATEI -->
-      <label for="fileUpload">Datei hochladen:</label>
+      <!-- File -->
       <input
         type="file"
         id="fileUpload"
         name="file"
         required
+        accept=".png,.jpg,.jpeg"
         data-parsley-maxfilesize="2"
       />
 
