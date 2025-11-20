@@ -181,7 +181,8 @@
       <label for="range">Zufriedenheit (0–100):</label>
       <input type="range" id="range" name="range" min="0" max="100" />
 
-      <!-- File -->
+      <!-- FILE -->
+      <label for="fileUpload">Profilbild (PNG/JPG, max. 2 MB):</label>
       <input
         type="file"
         id="fileUpload"
@@ -232,7 +233,12 @@
         },
       });
 
-      $("#myForm").parsley();
+      // Parsley initialisieren und Erfolgs-Meldung anzeigen
+      $("#myForm")
+        .parsley()
+        .on("form:success", function () {
+          alert("✔ Das Formular wurde erfolgreich validiert!");
+        });
     </script>
   </body>
 </html>
