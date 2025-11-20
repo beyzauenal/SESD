@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <!-- jQuery (für Parsley nötig) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- Parsley.js -->
+    <script src="https://cdn.jsdelivr.net/npm/parsleyjs@2/dist/parsley.min.js"></script>
+
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        padding: 40px;
+        background: linear-gradient(135deg, #ffe3ef, #f7f2ff);
+      }
+
+      h2 {
+        text-align: center;
+        font-weight: 600;
+        color: #4a3b6b;
+        margin-bottom: 20px;
+      }
+
+      form {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        max-width: 550px;
+        margin: auto;
+        box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      /* --- Form Labels --- */
+      label {
+        display: block;
+        margin-top: 18px;
+        font-weight: 500;
+        color: #4a3b6b;
+      }
+
+      /* --- Inputs --- */
+      input,
+      select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 6px;
+        border-radius: 8px;
+        border: 1.5px solid #c7b5e6;
+        font-size: 14px;
+        transition: 0.2s;
+        box-sizing: border-box;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: #8b59ff;
+        box-shadow: 0 0 6px rgba(139, 89, 255, 0.3);
+      }
+
+      /* --- Radio & Checkbox fix --- */
+      .inline-option {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-top: 8px;
+      }
+
+      /* --- Buttons --- */
+      .submit-btn,
+      .reset-btn {
+        margin-top: 25px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        width: 48%;
+        border: none;
+        font-size: 15px;
+        cursor: pointer;
+        transition: 0.3s;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+      }
+
+      .submit-btn {
+        background: #8b59ff;
+        color: white;
+      }
+
+      .submit-btn:hover {
+        background: #6931ff;
+      }
+
+      .reset-btn {
+        background: #ff5e7e;
+        color: white;
+      }
+
+      .reset-btn:hover {
+        background: #e84167;
+      }
+
+      /* --- Fehlernachrichten --- */
+      .parsley-errors-list {
+        color: #e84167;
+        font-size: 13px;
+        list-style: none;
+        margin-top: 6px;
+        padding-left: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <form id="myForm">
+      <input
+        type="file"
+        id="upload"
+        name="upload"
+        required
+        data-parsley-maxFileSize="48"
+        data-parsley-filetype="jpg"
+      />
+      <button type="submit">Upload</button>
+    </form>
+
+    <script>
+      // Parsley initialisieren und Erfolgs-Meldung anzeigen
+      $("#myForm")
+        .parsley()
+        .on("form:success", function () {
+          alert("✔ Das Formular wurde erfolgreich validiert!");
+        });
+
+      // File size validator (in KB)
+      window.Parsley.addValidator("maxFileSize", {
+        validateString: function (_value, maxSize, parsleyInstance) {
+          if (!window.FormData) {
+            alert("File upload not supported in this browser.");
+            return true;
+          }
+
+          const file = parsleyInstance.$element[0].files[0];
+          if (!file) {
+            return true;
+          }
+
+          const fileSize = file.size / 1024;
+          return fileSize <= maxSize;
+        },
+        requirementType: "integer",
+        messages: {
+          en: "The file is too large. Maximum size is %s KB.",
+        },
+      });
+
+      // File type validator
+      window.Parsley.addValidator("filetype", {
+        validateString: function (_value, fileTypes, parsleyInstance) {
+          const allowed = fileTypes
+            .split(",")
+            .map((type) => type.trim().toLowerCase());
+          const file = parsleyInstance.$element[0].files[0];
+          if (!file) {
+            return true;
+          }
+
+          const extension = file.name.split(".").pop().toLowerCase();
+          return allowed.includes(extension);
+        },
+        requirementType: "string",
+        messages: {
+          en: "Invalid file type. Allowed types: %s.",
+        },
+      });
+    </script>
+  </body>
+</html>
